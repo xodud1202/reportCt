@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Applications {
 
 	public static void main(String[] args) {
+		log.info("access Applications.main");
 		SpringApplication.run(Applications.class, args);
 	}
 
