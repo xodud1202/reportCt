@@ -1,4 +1,4 @@
-package controller;
+package api.controller;
 
 import lombok.Getter;
 import lombok.Setter;
