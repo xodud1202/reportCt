@@ -28,9 +28,9 @@
 		ORDER  BY CP.REG_DT ASC              /* 적립 순서대로 사용되게하기위함 */
 	</select>
 
-	<!-- 고객 포인트 합계 정보 -->
+	<!-- 고객 포인트 적립/사용 내역 정보 (최신 등록순) -->
 	<select id="getCustPointHstList" resultType="map" parameterType="api.domain.Point">
-		/* Point.getCustPointHstList : 고객 포인트 합계 정보 (최신 등록순) */
+		/* Point.getCustPointHstList : 고객 포인트 적립/사용 내역 정보 (최신 등록순) */
 		SELECT A.CUST_NO
 		     , A.EXT_DT
 		     , A.ORD_NO
