@@ -9,13 +9,13 @@ import org.springframework.context.annotation.Configuration;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
-@Configuration
+// @Configuration
 public class H2ServerConfiguration {
 
-	@Bean
+	/*@Bean
 	@ConfigurationProperties("spring.datasource.hikari")
 	public DataSource dataSource() throws SQLException {
 		Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9092").start();
 		return new HikariDataSource();
-	}
+	}*/
 }
