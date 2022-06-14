@@ -85,7 +85,7 @@ public class PointService {
 		// 포인트 합계 금액 조회
 		Map<String, Object> pntSumInfo = (Map<String, Object>) this.getCustPointSumInfo(param).get("data");
 		Long totLeftPntAmt = 0L;
-		if(pntSumInfo.containsKey("TOT_LEFT_PNT")) {
+		if(pntSumInfo != null && pntSumInfo.containsKey("TOT_LEFT_PNT")) {
 			totLeftPntAmt = (Long) pntSumInfo.get("TOT_LEFT_PNT");		// 포인트 사용 가능 금액 합계
 			if(totLeftPntAmt == null) totLeftPntAmt = 0L;
 		}
