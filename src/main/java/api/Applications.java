@@ -1,4 +1,4 @@
-package com.api;
+package api;
 
 
 import lombok.extern.slf4j.Slf4j;

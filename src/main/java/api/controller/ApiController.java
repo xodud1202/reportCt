@@ -1,9 +1,7 @@
-package com.api.controller;
+package api.controller;
 
-import com.api.domain.Point;
-import com.api.service.PointService;
-import lombok.Getter;
-import lombok.Setter;
+import api.domain.Point;
+import api.service.PointService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

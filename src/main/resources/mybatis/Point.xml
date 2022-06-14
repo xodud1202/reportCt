@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.api.dao.PointDao">
-	<select id="getPointList" resultType="com.api.domain.Point">
+<mapper namespace="api.dao.PointDao">
+	<select id="getPointList" resultType="api.domain.Point">
 		SELECT CUST_POINT_IDX
 		     , CUST_NO
 		     , GIVE_PNT_AMT
@@ -15,7 +15,7 @@
 	</select>
 
 	<!-- 고객 포인트 테이블 생성 -->
-	<insert id="insertCustPoint" parameterType="com.api.domain.Point">
+	<insert id="insertCustPoint" parameterType="api.domain.Point">
 		/* Point.insertCustPoint : 고객 포인트 테이블 생성 */
 		INSERT INTO T_CUST_POINT (
 		       CUST_NO
@@ -40,7 +40,7 @@
 	</insert>
 
 	<!-- 고객 포인트 적립/사용 이력 테이블 생성 -->
-	<insert id="insertCustPointHst" parameterType="com.api.domain.Point">
+	<insert id="insertCustPointHst" parameterType="api.domain.Point">
 		/* Point.insertCustPointHst : 고객 포인트 적립/사용 이력 테이블 생성 */
 		INSERT INTO T_CUST_POINT_HST (
 		       CUST_POINT_IDX

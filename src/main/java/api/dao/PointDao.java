@@ -1,6 +1,6 @@
-package com.api.dao;
+package api.dao;
 
-import com.api.domain.Point;
+import api.domain.Point;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -1,7 +1,7 @@
-package com.api.service;
+package api.service;
 
-import com.api.dao.PointDao;
-import com.api.domain.Point;
+import api.dao.PointDao;
+import api.domain.Point;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +29,11 @@ public class PointService {
 		Map<Object, String> result = new HashMap<>();
 		result.put("state", "FAIL");
 
-		if(param.getCustNo() != null && param.getCustNo() < 1) {
-			result.put("msg", "고객 번호를 입력해주세요.");
+		if (param == null || param.getCustNo() == null) {
+			result.put("msg", "고객 데이터를 전달 받지 못했습니다.");
+			return result;
+		} else if(param.getCustNo() < 1) {
+			result.put("msg", "유효한 고객 번호를 입력해주세요.");
 			return result;
 		} else if (param.getGivePntAmt() == 0) {
 			result.put("msg", "지급 포인트 금액을 입력해주세요.");
