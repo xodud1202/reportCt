@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +22,38 @@ public class PointService {
 		return pointDao.getPointList();
 	}
 
-	public List<Map<String, Object>> getCustPointSumInfo() {
-		return pointDao.getCustPointSumInfo();
+	// 고객별 포인트 합계 금액 조회
+	public Map<String, Object> getCustPointSumInfo(Point param) {
+		Map<String, Object> result = this.isAvailableCustNo(param);
+		if("OK".equals(result.get("state"))) {
+			result.put("data", pointDao.getCustPointSumInfo(param));
+		}
+
+		return result;
+	}
+
+	// 고객별 포인트 적립/사용 내역 조회 (페이징)
+	public Map<String, Object> getCustPointHstList(Point param) {
+		Map<String, Object> result = this.isAvailableCustNo(param);
+		if("OK".equals(result.get("state"))) {
+			if(param.getPageNo() < 1) param.setPageNo(1);
+			result.put("dataList", pointDao.getCustPointHstList(param));
+		}
+
+		return result;
+	}
+
+	// 고객 정보 유효성 조회
+	Map<String, Object> isAvailableCustNo(Point param) {
+		Map<String, Object> result = new HashMap<>();
+		if(param.getCustNo() == null || param.getCustNo() < 1) {
+			result.put("state", "FAIL");
+			result.put("msg", "유효한 고객 번호가 아닙니다. 다시 확인해주세요.");
+		} else {
+			result.put("state", "OK");
+		}
+
+		return result;
 	}
 
 	// 포인트 적립

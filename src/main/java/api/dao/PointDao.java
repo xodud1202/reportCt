@@ -23,5 +23,10 @@ public interface PointDao {
 	/**
 	 * 고객별 포인트 합계 금액 조회
 	 */
-	List<Map<String, Object>> getCustPointSumInfo();
+	Map<String, Object> getCustPointSumInfo(Point param);
+
+	/**
+	 * 고객별 포인트 적립/사용 내역 조회 (페이징)
+	 */
+	List<Map<String, Object>> getCustPointHstList(Point param);
 }

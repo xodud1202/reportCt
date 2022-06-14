@@ -41,7 +41,13 @@ public class ApiController {
 
     @GetMapping("/sum/cust/point/info")
     @ResponseBody
-    public List<Map<String, Object>> getCustPointSumInfo() {
-        return pointService.getCustPointSumInfo();
+    public Map<String, Object> getCustPointSumInfo(Point param) {
+        return pointService.getCustPointSumInfo(param);
+    }
+
+    @GetMapping("/cust/point/hst/list")
+    @ResponseBody
+    public Map<String, Object> getCustPointHstList(Point param) {
+        return pointService.getCustPointHstList(param);
     }
 }

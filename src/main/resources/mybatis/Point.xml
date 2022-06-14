@@ -15,14 +15,38 @@
 	</select>
 
 	<!-- 고객 포인트 합계 정보 -->
-	<select id="getCustPointSumInfo" resultType="map">
+	<select id="getCustPointSumInfo" resultType="map" parameterType="api.domain.Point">
 		/* Point.getCustPointSumInfo : 고객 포인트 합계 정보 */
 		SELECT CUST_NO
 		     , SUM(LEFT_PNT_AMT) AS SUM_PNT_AMT
 		FROM   T_CUST_POINT CP
-		WHERE  1=1
+		WHERE  CUST_NO = #{custNo}
 		AND    EXT_DT > NOW()
 		GROUP  BY CUST_NO
+	</select>
+
+	<!-- 고객 포인트 합계 정보 -->
+	<select id="getCustPointHstList" resultType="map" parameterType="api.domain.Point">
+		/* Point.getCustPointHstList : 고객 포인트 합계 정보 */
+		SELECT A.CUST_NO
+		     , A.EXT_DT
+		     , A.ORD_NO
+		     , A.HST_DESC
+		     , A.PNT_AMT
+		     , CASE WHEN A.GBN = 'USE' THEN '사용' WHEN A.GBN = 'SAVE' THEN '적립' ELSE '그외' END AS GBN
+		FROM   (SELECT CP.CUST_NO
+		             , CP.EXT_DT
+		             , CPH.PNT_AMT
+		             , CPH.HST_DESC
+		             , CPH.ORD_NO
+		             , CPH.GBN
+		        FROM   T_CUST_POINT CP
+		        INNER  JOIN T_CUST_POINT_HST CPH
+		        ON     CP.CUST_POINT_IDX = CPH.CUST_POINT_IDX
+		        WHERE  CUST_NO = #{custNo}
+		        AND    CPH.DEL_YN = 'N'
+		        ORDER  BY CPH.REG_DT DESC) A
+		LIMIT  10 OFFSET #{startNo}
 	</select>
 
 	<!-- 고객 포인트 테이블 생성 -->
