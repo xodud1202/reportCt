@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.dao.PointDao">
+	<select id="getPointList" resultType="com.api.domain.Point">
+		SELECT CUST_POINT_IDX
+		     , CUST_NO
+		     , GIVE_PNT_AMT
+		     , USE_PNT_AMT
+		     , LEFT_PNT_AMT
+		     , EXT_DT
+		     , REG_DT
+		     , UPD_DT
+		FROM   T_CUST_POINT
+		WHERE  1=1
+	</select>
+
+	<!-- 고객 포인트 테이블 생성 -->
+	<insert id="insertCustPoint" parameterType="com.api.domain.Point">
+		/* Point.insertCustPoint : 고객 포인트 테이블 생성 */
+		INSERT INTO T_CUST_POINT (
+		       CUST_NO
+		     , GIVE_PNT_AMT
+		     , USE_PNT_AMT
+		     , LEFT_PNT_AMT
+		     , EXT_DT
+		     , REG_DT
+		     , UPD_DT
+		) VALUES (
+		       #{custNo}
+		     , #{givePntAmt}
+		     , 0
+		     , #{leftPntAmt}
+		     , NOW() + 365
+		     , NOW()
+		     , NOW()
+		)
+		<selectKey resultType="Long" keyProperty="custPointIdx" order="AFTER">
+		    SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<!-- 고객 포인트 적립/사용 이력 테이블 생성 -->
+	<insert id="insertCustPointHst" parameterType="com.api.domain.Point">
+		/* Point.insertCustPointHst : 고객 포인트 적립/사용 이력 테이블 생성 */
+		INSERT INTO T_CUST_POINT_HST (
+		       CUST_POINT_IDX
+		     , GBN
+		     , HST_DESC
+		     , PNT_AMT
+		     , ORD_NO
+		     , DEL_YN
+		     , REG_DT
+		     , UPD_DT
+		) VALUES (
+		       #{custPointIdx}
+		     , #{gbn}
+		     , #{hstDesc}
+		     , #{pntAmt}
+		     , #{ordNo}
+		     , 'N'
+		     , NOW()
+		     , NOW()
+		)
+	</insert>
+</mapper>
