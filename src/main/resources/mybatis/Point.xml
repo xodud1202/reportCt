@@ -14,6 +14,17 @@
 		WHERE  1=1
 	</select>
 
+	<!-- 고객 포인트 합계 정보 -->
+	<select id="getCustPointSumInfo" resultType="map">
+		/* Point.getCustPointSumInfo : 고객 포인트 합계 정보 */
+		SELECT CUST_NO
+		     , SUM(LEFT_PNT_AMT) AS SUM_PNT_AMT
+		FROM   T_CUST_POINT CP
+		WHERE  1=1
+		AND    EXT_DT > NOW()
+		GROUP  BY CUST_NO
+	</select>
+
 	<!-- 고객 포인트 테이블 생성 -->
 	<insert id="insertCustPoint" parameterType="api.domain.Point">
 		/* Point.insertCustPoint : 고객 포인트 테이블 생성 */

@@ -23,6 +23,10 @@ public class PointService {
 		return pointDao.getPointList();
 	}
 
+	public List<Map<String, Object>> getCustPointSumInfo() {
+		return pointDao.getCustPointSumInfo();
+	}
+
 	// 포인트 적립
 	@Transactional
 	public Map<Object, String> saveCustPointInfo(Point param) {

@@ -11,6 +11,7 @@ public class Point {
 	private int    leftPntAmt;
 	private int    pntAmt;
 	private int    ordNo;
+	private int    sumPntAmt;
 	private String delYn;
 	private String gbn;
 	private String hstDesc;

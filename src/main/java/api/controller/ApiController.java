@@ -39,5 +39,9 @@ public class ApiController {
         return pointService.saveCustPointInfo(param);
     }
 
-
+    @GetMapping("/sum/cust/point/info")
+    @ResponseBody
+    public List<Map<String, Object>> getCustPointSumInfo() {
+        return pointService.getCustPointSumInfo();
+    }
 }
