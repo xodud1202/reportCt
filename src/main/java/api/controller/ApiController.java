@@ -19,32 +19,39 @@ public class ApiController {
     @Autowired
     private PointService pointService;
 
-    /*
-    1. 화면에 helloworld가 출력됩니다.
-    */
-    @GetMapping("/select/test/table")
-    @ResponseBody
-    public List<Point> testTable() {
-        return pointService.getPointList();
-    }
-
     /**
-     * 필수 파라미터 (custNo : 고객번호(long), givePntAmt : 포인트 지급 금액(int))
-     * @param param
-     * @return
+     * 고객 포인트 지급 > 필수 파라미터 (  custNo     : 고객번호(long)
+     *                              , givePntAmt : 포인트 지급 금액(int) )
      */
     @PostMapping("/save/point")
     @ResponseBody
-    public Map<Object, String> saveCustPointInfo(@RequestBody Point param) {
+    public Map<String, Object> saveCustPointInfo(@RequestBody Point param) {
         return pointService.saveCustPointInfo(param);
     }
 
+    /**
+     * 고객 사용 포인트 차감 > 필수 파라미터 (   custNo    : 고객번호(long)
+     *                                   , usePntAmt : 포인트 사용 금액(int)
+     *                                   , ordNo     : 포인트 사용 주문번호 )
+     */
+    @PostMapping("/use/point")
+    @ResponseBody
+    public Map<String, Object> useCustPointInfo(@RequestBody Point param) {
+        return pointService.useCustPointInfo(param);
+    }
+
+    /**
+     * 고객별 포인트 합계 금액 조회 > 필수 파라미터 ( custNo : 고객번호(long) )
+     */
     @GetMapping("/sum/cust/point/info")
     @ResponseBody
     public Map<String, Object> getCustPointSumInfo(Point param) {
         return pointService.getCustPointSumInfo(param);
     }
 
+    /**
+     * 고객별 포인트 적립/사용 내역 조회 (페이징) > 필수 파라미터 ( custNo : 고객번호(long) )
+     */
     @GetMapping("/cust/point/hst/list")
     @ResponseBody
     public Map<String, Object> getCustPointHstList(Point param) {

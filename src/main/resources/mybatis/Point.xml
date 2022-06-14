@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="api.dao.PointDao">
-	<select id="getPointList" resultType="api.domain.Point">
-		SELECT CUST_POINT_IDX
-		     , CUST_NO
-		     , GIVE_PNT_AMT
-		     , USE_PNT_AMT
-		     , LEFT_PNT_AMT
-		     , EXT_DT
-		     , REG_DT
-		     , UPD_DT
-		FROM   T_CUST_POINT
-		WHERE  1=1
-	</select>
-
 	<!-- 고객 포인트 합계 정보 -->
 	<select id="getCustPointSumInfo" resultType="map" parameterType="api.domain.Point">
 		/* Point.getCustPointSumInfo : 고객 포인트 합계 정보 */
 		SELECT CUST_NO
-		     , SUM(LEFT_PNT_AMT) AS SUM_PNT_AMT
+		     , SUM(GIVE_PNT_AMT) AS TOT_SAVE_PNT
+		     , SUM(USE_PNT_AMT) AS TOT_USE_PNT
+		     , SUM(CASE WHEN CP.EXT_DT <![CDATA[ < ]]> NOW() THEN CP.LEFT_PNT_AMT END) AS TOT_EXT_PNT
+		     , SUM(CASE WHEN CP.EXT_DT > NOW() THEN CP.LEFT_PNT_AMT END) AS TOT_LEFT_PNT
 		FROM   T_CUST_POINT CP
 		WHERE  CUST_NO = #{custNo}
-		AND    EXT_DT > NOW()
 		GROUP  BY CUST_NO
+	</select>
+
+	<!-- 고객 포인트 사용 가능 금액 조회 -->
+	<select id="getUsableCustPointList" parameterType="api.domain.Point" resultType="api.domain.Point">
+		/* Point.getUsableCustPointList : 고객 포인트 사용 가능 금액 조회 */
+		SELECT CP.CUST_NO
+		     , CP.CUST_POINT_IDX
+		     , CP.GIVE_PNT_AMT
+		     , CP.USE_PNT_AMT
+		     , CP.LEFT_PNT_AMT
+		FROM   T_CUST_POINT CP
+		WHERE  CP.EXT_DT > NOW()
+		AND    CP.CUST_NO = #{custNo}
+		ORDER  BY CP.REG_DT ASC              /* 적립 순서대로 사용되게하기위함 */
 	</select>
 
 	<!-- 고객 포인트 합계 정보 -->
 	<select id="getCustPointHstList" resultType="map" parameterType="api.domain.Point">
-		/* Point.getCustPointHstList : 고객 포인트 합계 정보 */
+		/* Point.getCustPointHstList : 고객 포인트 합계 정보 (최신 등록순) */
 		SELECT A.CUST_NO
 		     , A.EXT_DT
 		     , A.ORD_NO
@@ -97,4 +100,14 @@
 		     , NOW()
 		)
 	</insert>
+
+	<!-- 포인트 마스터 테이블 정보 수정 -->
+	<update id="updateCustPointInfo" parameterType="api.domain.Point">
+		/* Point.updateCustPointInfo : 포인트 마스터 테이블 정보 수정 */
+		UPDATE T_CUST_POINT SET
+		       USE_PNT_AMT    = #{usePntAmt}
+		     , LEFT_PNT_AMT   = #{leftPntAmt}
+		     , UPD_DT         = NOW()
+		WHERE  CUST_POINT_IDX = #{custPointIdx}
+	</update>
 </mapper>

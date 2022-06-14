@@ -18,14 +18,12 @@ public class PointService {
 	@Autowired
 	private PointDao pointDao;
 
-	public List<Point> getPointList() {
-		return pointDao.getPointList();
-	}
-
 	// 고객별 포인트 합계 금액 조회
 	public Map<String, Object> getCustPointSumInfo(Point param) {
+		// 유효 고객 번호 여부 조회
 		Map<String, Object> result = this.isAvailableCustNo(param);
 		if("OK".equals(result.get("state"))) {
+			// 고객별 금액 합계 정보 조회
 			result.put("data", pointDao.getCustPointSumInfo(param));
 		}
 
@@ -34,9 +32,13 @@ public class PointService {
 
 	// 고객별 포인트 적립/사용 내역 조회 (페이징)
 	public Map<String, Object> getCustPointHstList(Point param) {
+		// 유효 고객 번호 여부 조회
 		Map<String, Object> result = this.isAvailableCustNo(param);
 		if("OK".equals(result.get("state"))) {
+			// 페이지번호가 1보다 작을 경우 1페이지로 조회되도록
 			if(param.getPageNo() < 1) param.setPageNo(1);
+
+			// 고객 포인트 적립/사용 내역 조회
 			result.put("dataList", pointDao.getCustPointHstList(param));
 		}
 
@@ -56,10 +58,101 @@ public class PointService {
 		return result;
 	}
 
+	// 고객 포인트 사용 처리
+	@Transactional
+	public Map<String, Object> useCustPointInfo(Point param){
+		Map<String, Object> result = new HashMap<>();
+		result.put("state", "FAIL");
+
+		// 파라미터 유효성 체크
+		if (param == null || param.getCustNo() == null) {
+			result.put("msg", "고객 데이터를 전달 받지 못했습니다.");
+			return result;
+		} else if(param.getCustNo() < 1) {
+			result.put("msg", "유효한 고객 번호를 입력해주세요.");
+			return result;
+		} else if (param.getUsePntAmt() == 0) {
+			result.put("msg", "사용 포인트 금액을 입력해주세요.");
+			return result;
+		} else if (param.getUsePntAmt() < 1) {
+			result.put("msg", "사용 포인트 금액을 양수로 입력해주세요.");
+			return result;
+		} else if (param.getOrdNo() < 1) {
+			result.put("msg", "포인트 사용 주문번호를 입력해주세요.");
+			return result;
+		}
+
+		// 포인트 합계 금액 조회
+		Map<String, Object> pntSumInfo = (Map<String, Object>) this.getCustPointSumInfo(param).get("data");
+		Long totLeftPntAmt = 0L;
+		if(pntSumInfo.containsKey("TOT_LEFT_PNT")) {
+			totLeftPntAmt = (Long) pntSumInfo.get("TOT_LEFT_PNT");		// 포인트 사용 가능 금액 합계
+			if(totLeftPntAmt == null) totLeftPntAmt = 0L;
+		}
+
+		if(totLeftPntAmt < param.getUsePntAmt()) {
+			result.put("msg", "잔여 포인트 금액이 부족합니다.");
+			return result;
+		}
+
+		// 고객 사용가능 포인트 금액 조회 (적립순)
+		List<Point> pointList = this.getUsableCustPointList(param);
+		int leftUsePntAmt = param.getUsePntAmt();		// 남은 포인트 사용 금액
+
+		// 사용 포인트 금액 전부 처리 될때까지 잔여 금액에서 제거
+		for(Point left : pointList) {
+			if (left.getLeftPntAmt() > 0) {
+				left.setGbn("USE");
+				left.setOrdNo(param.getOrdNo());
+				left.setHstDesc("주문 포인트 사용 (주문번호 : " + param.getOrdNo() + ")");
+				if(left.getLeftPntAmt() >= leftUsePntAmt) {
+					// 포인트 남은 금액이 사용 금액보다 크면 해당 금액만큼 차감 후 종료
+					left.setUsePntAmt(left.getUsePntAmt() + leftUsePntAmt);
+					left.setLeftPntAmt(left.getLeftPntAmt() - leftUsePntAmt);
+					this.updateCustPointInfo(left);
+
+					left.setPntAmt(-leftUsePntAmt);
+					leftUsePntAmt = 0;
+					this.insertCustPointHst(left);
+					break;
+				} else {
+					// 포인트 남은 금액이 사용 금액보다 작을 경우 해당 포인트 차감 후 loop 재계산
+					int thisLeftAmt = left.getLeftPntAmt();
+					leftUsePntAmt = leftUsePntAmt - left.getLeftPntAmt();
+					left.setUsePntAmt(left.getUsePntAmt() + left.getLeftPntAmt());
+					left.setLeftPntAmt(0);
+					this.updateCustPointInfo(left);
+
+					left.setPntAmt(-thisLeftAmt);
+					this.insertCustPointHst(left);
+				}
+			}
+		}
+
+		if(leftUsePntAmt > 0) {
+			throw new IllegalStateException("포인트 계산이 잘못되었습니다. 다시 시도해주세요.");
+		} else {
+			result.put("state", "OK");
+			result.put("msg", param.getUsePntAmt() + " 포인트 사용했습니다.");
+		}
+
+		return result;
+	}
+
+	@Transactional
+	public int updateCustPointInfo(Point param) {
+		return pointDao.updateCustPointInfo(param);
+	}
+
+	// 포인트 사용 가능 금액 리스트 조회
+	public List<Point> getUsableCustPointList(Point param) {
+		return pointDao.getUsableCustPointList(param);
+	}
+
 	// 포인트 적립
 	@Transactional
-	public Map<Object, String> saveCustPointInfo(Point param) {
-		Map<Object, String> result = new HashMap<>();
+	public Map<String, Object> saveCustPointInfo(Point param) {
+		Map<String, Object> result = new HashMap<>();
 		result.put("state", "FAIL");
 
 		if (param == null || param.getCustNo() == null) {
