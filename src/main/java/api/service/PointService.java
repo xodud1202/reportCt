@@ -59,7 +59,9 @@ public class PointService {
 
 	// 고객 정보 유효성 조회
 	String isAvailableCustNo(Point param) {
-		if(param.getCustNo() == null || param.getCustNo() < 1) {
+		if(param == null) {
+			return "전달 데이터가 유실되었습니다.";
+		} else if(param.getCustNo() == null || param.getCustNo() < 1) {
 			return "유효한 고객 번호가 아닙니다. 다시 확인해주세요.";
 		}
 
@@ -137,9 +139,9 @@ public class PointService {
 	// 포인트 사용 파라미터 유효성 체크
 	String useCustPointParamValidation(Point param) {
 		// 파라미터 유효성 체크
-		if (param == null || param.getCustNo() == null) {
-			return "고객 데이터를 전달 받지 못했습니다.";
-		} else if(param.getCustNo() < 1) {
+		if (param == null) {
+			return "전달 데이터가 유실되었습니다.";
+		} else if(param.getCustNo() == null || param.getCustNo() < 1) {
 			return "유효한 고객 번호를 입력해주세요.";
 		} else if (param.getUsePntAmt() == 0) {
 			return "사용 포인트 금액을 입력해주세요.";
@@ -196,9 +198,9 @@ public class PointService {
 	// 포인트 적립 파라미터 유효성 체크
 	String saveCustPointParamValidation(Point param) {
 		// 파라미터 유효성 체크
-		if (param == null || param.getCustNo() == null) {
-			return "고객 데이터를 전달 받지 못했습니다.";
-		} else if(param.getCustNo() < 1) {
+		if (param == null) {
+			return "전달 데이터가 유실되었습니다.";
+		} else if(param.getCustNo() == null || param.getCustNo() < 1) {
 			return "유효한 고객 번호를 입력해주세요.";
 		} else if (param.getGivePntAmt() == 0) {
 			return "지급 포인트 금액을 입력해주세요.";
