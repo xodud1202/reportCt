@@ -1,5 +1,5 @@
-# Project linux 설치 방법
-### 1. 프로젝트 설치 workspace에 git clone 받기
+# Project linux 빌드/설치 방법
+### 1. 프로젝트 설치 workspace에 git clone
     sudo git clone https://github.com/xodud1202/reportCt.git
 
 ### 2. 프로젝트 빌드
