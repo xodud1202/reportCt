@@ -124,12 +124,12 @@
 	<select id="getCustPointHstListByOrdNo" parameterType="api.domain.Point" resultType="api.domain.Point">
 		/* Point.getCustPointHstListByOrdNo : 주문번호 사용 포인트 조회 */
 		SELECT CP.CUST_POINT_IDX
+		     , CP.CUST_NO
 		     , CP.USE_PNT_AMT
 		     , CP.LEFT_PNT_AMT
 		     , CPH.CUST_POINT_HST_IDX
 		     , CPH.PNT_AMT
 		     , CPH.ORD_NO
-		     , CPH.CUST_NO
 		FROM   T_CUST_POINT CP
 		INNER  JOIN T_CUST_POINT_HST CPH
 		ON     CP.CUST_POINT_IDX = CPH.CUST_POINT_IDX
