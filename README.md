@@ -6,7 +6,7 @@
     cd reportCt
     
     * gradlew 실행 권한 추가
-    sudo chmod -x gradlew
+    sudo chmod +x gradlew
 
     * gradlew 실행하여 빌드
     sudo ./gradlew build
