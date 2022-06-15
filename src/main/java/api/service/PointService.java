@@ -214,6 +214,12 @@ public class PointService {
 		// 고객 사용 포인트 조회
 		int totUseCancelPoint = 0;
 		List<Point> usePointList = pointDao.getCustPointHstListByOrdNo(param);
+		if(usePointList == null || usePointList.size() < 1) {
+			result.put("state", "FAIL");
+			result.put("msg", "해당 주문번호에 사용한 포인트가 존재하지 않습니다.");
+			return result;
+		}
+
 		for(Point usePoint : usePointList) {
 			int usePnt = Math.abs(usePoint.getPntAmt());				// 사용 포인트 절대값(양수)로 변경
 			totUseCancelPoint += usePnt;								// 사용 취소 포인트 총합
