@@ -11,8 +11,6 @@
     * gradlew 실행하여 빌드
     sudo ./gradlew build
 
-### 3. 빌드된 jar 파일을 java로 실행
+### 3. 빌드된 jar 파일 실행
     cd build/libs
     java -jar musinsa-1.0-SNAPSHOT.jar
-
-    * java 실행이 안된다면 jdk 설치하여 실행 필요.
