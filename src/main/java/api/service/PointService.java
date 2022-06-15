@@ -200,4 +200,40 @@ public class PointService {
 	public int insertCustPointHst(Point param) {
 		return pointDao.insertCustPointHst(param);
 	}
+
+	// 고객 포인트 사용 취소 처리
+	@Transactional
+	public Map<String, Object> cancelUseCustPoint(Point param) {
+		Map<String, Object> result = new HashMap<>();
+		if(param.getOrdNo() < 1) {
+			result.put("state", "FAIL");
+			result.put("msg", "사용 취소할 주문번호를 정확히 입력해주세요.");
+			return result;
+		}
+
+		// 고객 사용 포인트 조회
+		int totUseCancelPoint = 0;
+		List<Point> usePointList = pointDao.getCustPointHstListByOrdNo(param);
+		for(Point usePoint : usePointList) {
+			int usePnt = Math.abs(usePoint.getPntAmt());				// 사용 포인트 절대값(양수)로 변경
+			totUseCancelPoint += usePnt;								// 사용 취소 포인트 총합
+
+			usePoint.setUsePntAmt(usePoint.getUsePntAmt() - usePnt);	// 사용 금액 차감
+			usePoint.setLeftPntAmt(usePoint.getLeftPntAmt() + usePnt);	// 남은 금액 사용 금액만큼 증가
+
+			// 고객 포인트 사용 취소 처리
+			this.updateCustPointInfo(usePoint);
+			this.deleteCustPointHst(usePoint);
+		}
+
+		result.put("state", "OK");
+		result.put("msg", totUseCancelPoint + " 포인트 사용 취소했습니다.");
+		return result;
+	}
+
+	// 포인트 사용 내역 제거
+	@Transactional
+	public int deleteCustPointHst(Point param) {
+		return pointDao.deleteCustPointHst(param);
+	}
 }

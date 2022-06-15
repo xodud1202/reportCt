@@ -110,4 +110,31 @@
 		     , UPD_DT         = NOW()
 		WHERE  CUST_POINT_IDX = #{custPointIdx}
 	</update>
+
+	<!-- 포인트 사용 내역 제거 -->
+	<update id="deleteCustPointHst" parameterType="api.domain.Point">
+		/* Point.deleteCustPointHst : deleteCustPointHst */
+		UPDATE T_CUST_POINT_HST SET
+		       DEL_YN             = 'Y'
+		     , UPD_DT             = NOW()
+		WHERE  CUST_POINT_HST_IDX = #{custPointHstIdx}
+	</update>
+
+	<!-- 주문번호 사용 포인트 조회 -->
+	<select id="getCustPointHstListByOrdNo" parameterType="api.domain.Point" resultType="api.domain.Point">
+		/* Point.getCustPointHstListByOrdNo : 주문번호 사용 포인트 조회 */
+		SELECT CP.CUST_POINT_IDX
+		     , CP.USE_PNT_AMT
+		     , CP.LEFT_PNT_AMT
+		     , CPH.CUST_POINT_HST_IDX
+		     , CPH.PNT_AMT
+		     , CPH.ORD_NO
+		     , CPH.CUST_NO
+		FROM   T_CUST_POINT CP
+		INNER  JOIN T_CUST_POINT_HST CPH
+		ON     CP.CUST_POINT_IDX = CPH.CUST_POINT_IDX
+		WHERE  CPH.GBN = 'USE'
+		AND    CPH.DEL_YN = 'N'
+		AND    CPH.ORD_NO = #{ordNo}
+	</select>
 </mapper>

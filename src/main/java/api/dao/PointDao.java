@@ -37,4 +37,14 @@ public interface PointDao {
 	 * 고객 포인트 마스터 정보 수정
 	 */
 	int updateCustPointInfo(Point param);
+
+	/**
+	 * 주문번호 사용 포인트 조회
+	 */
+	List<Point> getCustPointHstListByOrdNo(Point param);
+
+	/**
+	 * 포인트 사용 내역 제거
+	 */
+	int deleteCustPointHst(Point param);
 }

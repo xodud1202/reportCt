@@ -30,7 +30,7 @@ public class ApiController {
     }
 
     /**
-     * 고객 사용 포인트 차감 > 필수 파라미터 (   custNo    : 고객번호(long)
+     * 고객 사용 포인트 사용 > 필수 파라미터 (   custNo   : 고객번호(long)
      *                                   , usePntAmt : 포인트 사용 금액(int)
      *                                   , ordNo     : 포인트 사용 주문번호 )
      */
@@ -38,6 +38,15 @@ public class ApiController {
     @ResponseBody
     public Map<String, Object> useCustPointInfo(@RequestBody Point param) {
         return pointService.useCustPointInfo(param);
+    }
+
+    /**
+     * 사용 포인트 취소  > 필수 파라미터 ( ordNo : 포인트 사용 주문번호 )
+     */
+    @PostMapping("/cancel/use/point")
+    @ResponseBody
+    public Map<String, Object> cancelUseCustPointInfo(@RequestBody Point param) {
+        return pointService.cancelUseCustPoint(param);
     }
 
     /**

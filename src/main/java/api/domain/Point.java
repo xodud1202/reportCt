@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class Point {
 	private Long   custPointIdx;
+	private Long   custPointHstIdx;
 	private Long   custNo;
 	private int    givePntAmt;
 	private int    usePntAmt;
