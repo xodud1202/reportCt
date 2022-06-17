@@ -30,6 +30,7 @@
                         },
                  state: 결과(OK or FAIL),
                  msg  : 결과메세지(성공시없음)
+               }
     
 #### 2. 고객별 적립/사용 내역 조회
     GET Content-Type: application/json
