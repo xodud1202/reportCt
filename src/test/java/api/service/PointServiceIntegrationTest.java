@@ -18,6 +18,7 @@ public class PointServiceIntegrationTest {
 	@Autowired
 	private PointService pointService;
 
+	// 고객별 포인트 합계 조회
 	@Test
 	public void getCustPointSumInfo() {
 		// given
@@ -31,6 +32,7 @@ public class PointServiceIntegrationTest {
 		Assertions.assertThat("OK").isEqualTo(result.get("state"));
 	}
 
+	// 고객별 포인트 적립/사용 리스트
 	@Test
 	public void getCustPointHstList() {
 		// given
@@ -45,6 +47,7 @@ public class PointServiceIntegrationTest {
 		Assertions.assertThat("OK").isEqualTo(result.get("state"));
 	}
 
+	// 포인트 적립 테스트
 	@Test
 	public void saveCustPointInfo() {
 		// given
@@ -59,32 +62,29 @@ public class PointServiceIntegrationTest {
 		Assertions.assertThat("OK").isEqualTo(result.get("state"));
 	}
 
-
-	/*
-	// 포인트 사용 테스트는 데이터가 존재해야 테스트 가능 : H2DB로 통합 테스트 불가
+	// 포인트 사용 테스트
 	@Test
 	public void useCustPointInfo() {
 		// given
 		Point param = new Point();
-		param.setCustNo(1L);
-		param.setUsePntAmt(1000);
-		param.setOrdNo(1);
+		param.setCustNo(891202L);
+		param.setUsePntAmt(3000);
+		param.setOrdNo(8912021);
 
 		// when
 		Map<String, Object> result = pointService.useCustPointInfo(param);
 
 		// then
 		Assertions.assertThat("OK").isEqualTo(result.get("state"));
-	}*/
+	}
 
 
-	/*
-	// 포인트 사용취소 테스트는 데이터가 존재해야 테스트 가능 : H2DB로 통합 테스트 불가
+	// 포인트 사용취소 테스트
 	@Test
 	public void cancelUseCustPoint() {
 		// given
 		Point param = new Point();
-		param.setOrdNo(1);
+		param.setOrdNo(891202);
 
 		// when
 		Map<String, Object> result = pointService.cancelUseCustPoint(param);
@@ -92,5 +92,4 @@ public class PointServiceIntegrationTest {
 		// then
 		Assertions.assertThat("OK").isEqualTo(result.get("state"));
 	}
-	*/
 }
