@@ -15,7 +15,7 @@
     cd build/libs
     java -jar musinsa-1.0-SNAPSHOT.jar
     
-### 4. API 사용 방법
+### 4. API 호출 방법
 #### 1) 고객별 포인트 합계 조회
     GET Content-Type: application/json
     호출 : http://localhost:8080/sum/cust/point/info
