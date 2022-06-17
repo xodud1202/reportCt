@@ -16,7 +16,7 @@
     java -jar musinsa-1.0-SNAPSHOT.jar
     
 ### 4. API 사용 방법
-#### 1. 고객별 포인트 합계 조회
+#### 1) 고객별 포인트 합계 조회
     GET Content-Type: application/json
     호출 : http://localhost:8080/sum/cust/point/info
     필수 파라미터 : custNo
@@ -32,7 +32,7 @@
                  msg  : 결과메세지(성공시없음)
                }
     
-#### 2. 고객별 적립/사용 내역 조회
+#### 2) 고객별 적립/사용 내역 조회
     GET Content-Type: application/json
     호출 : http://localhost:8080/cust/point/hst/list
     필수 파라미터 : custNo, pageNo
@@ -52,21 +52,21 @@
                 msg     : 결과 메세지(성공지 없음)
                }
 
-#### 3. 고객별 포인트 적립
+#### 3) 고객별 포인트 적립
     POST Accept: application/json, Content-Type: application/json
     호출 : http://localhost:8080/save/point
     필수 파라미터 : custNo, givePntAmt
     파라미터 예제 : { "custNo" : "1", "givePntAmt" : "700" }
     response : { state: 결과(OK or FAIL), msg: 메세지 }
     
-#### 4. 고객별 포인트 사용
+#### 4) 고객별 포인트 사용
     POST Accept: application/json, Content-Type: application/json
     호출 : http://localhost:8080/use/point
     필수 파라미터 : custNo, usePntAmt, ordNo
     파라미터 예제 : { "custNo" : "1", "usePntAmt" : "700", "ordNo" : "1" }
     response : { state: 결과(OK or FAIL), msg: 메세지 }
     
-#### 5. 포인트 사용 취소 (실패시 data rollback용)
+#### 5) 포인트 사용 취소 (실패시 data rollback용)
     POST Accept: application/json, Content-Type: application/json
     호출 : http://localhost:8080/cancel/use/point
     필수 파라미터 : ordNo
