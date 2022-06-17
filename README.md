@@ -21,7 +21,8 @@
     호출 : http://localhost:8080/sum/cust/point/info
     필수 파라미터 : custNo
     예제 : http://localhost:8080/sum/cust/point/info?custNo=1
-    response : { data : {
+    response : {
+                 data : {
                          TOT_SAVE_PNT : 적립금액합계,
                          TOT_LEFT_PNT : 잔여금액합계,
                          CUST_NO      : 고객번호,
